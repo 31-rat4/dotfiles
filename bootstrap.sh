@@ -14,6 +14,8 @@ function doIt() {
 		--exclude "LICENSE-MIT.txt" \
 		-avh --no-perms . ~;
 
+		rsync /terminator/config ~/.config/terminator/config;
+
 		source ~/.bash_profile;
 
 }

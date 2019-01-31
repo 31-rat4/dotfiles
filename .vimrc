@@ -81,6 +81,8 @@ set showcmd
 set scrolloff=3
 " Auto Run NERDTree
 autocmd vimenter * NERDTree
+" Start the cursor on file, not on NERDTree
+autocmd VimEnter * NERDTree | wincmd p
 
 
 " Strip trailing whitespace (,ss)
