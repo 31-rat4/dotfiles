@@ -1,7 +1,7 @@
 [global_config]
   enabled_plugins = CustomCommandsMenu, LaunchpadCodeURLHandler, APTURLHandler, LaunchpadBugURLHandler
 [keybindings]
-  close_term = <Primary>w
+  close_term = <Primary><Shift>w
   next_tab = <Primary>Tab
   prev_tab = <Primary><Shift>Tab
 [layouts]
