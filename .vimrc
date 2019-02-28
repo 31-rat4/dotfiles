@@ -79,10 +79,15 @@ set title
 set showcmd
 " Start scrolling three lines before the horizontal window border
 set scrolloff=3
+" Set autocomplete
+set omnifunc=syntaxcomplete#Complete
 " Auto Run NERDTree
 autocmd vimenter * NERDTree
 " Start the cursor on file, not on NERDTree
 autocmd VimEnter * NERDTree | wincmd p
+" add yaml stuffs
+au! BufNewFile,BufReadPost *.{yaml,yml} set filetype=yaml foldmethod=indent
+autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab
 
 
 " Strip trailing whitespace (,ss)
