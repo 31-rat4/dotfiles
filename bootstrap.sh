@@ -4,8 +4,10 @@ cd "$(dirname "${BASH_SOURCE}")";
 
 git pull origin master;
 
-function doIt() {
+function fileSync (){
 	rsync --exclude ".git/" \
+		--exclude "terminator/"\
+		--exclude "vimrc/"\
 		--exclude ".vimrc"\
 		--exclude ".DS_Store" \
 		--exclude ".osx" \
@@ -14,13 +16,14 @@ function doIt() {
 		--exclude "LICENSE-MIT.txt" \
 		-avh --no-perms . ~;
 
-		rsync terminator/config ~/.config/terminator/config;
+	# Copy Terminator config file (somme times need to be manual enabled).
+	rsync terminator/config ~/.config/terminator/config;
 
-		source ~/.bash_profile;
+	source ~/.bash_profile;
 
 }
 
-function vimrcDoIt() {
+function vimrConfig() {
 
 
 	if [ ! -d ~/.vim_runtime ]
@@ -34,15 +37,32 @@ function vimrcDoIt() {
 
 }
 
+function zshPluguinConfig() {
+		# Only proceed if zsh is installed
+		echo "Cheking for ZSH"
+		if command -v zsh > /dev/null;
+		then
+				echo "Install oh-my-zzsh pluguins."
+				git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
+				git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting;
+
+		else
+				echo "ZSH not detected. Skipping pluguin install...";
+		fi
+}
+
+function doIt() {
+		fileSync;
+		vimrConfig;
+		zshPluguinConfig	;
+}
+
 if [ "$1" == "--force" -o "$1" == "-f" ]; then
-	doIt;
-	vimrcDoIt;
+		doIt;
 else
 	read -p "This may overwrite existing files in your home directory. Are you sure? (y/n) " -n 1;
-	echo "";
 	if [[ $REPLY =~ ^[Yy]$ ]]; then
 		doIt;
-		vimrcDoIt;
 	fi;
 fi;
 unset doIt;
