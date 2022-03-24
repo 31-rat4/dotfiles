@@ -17,9 +17,8 @@ function fileSync (){
 		-avh --no-perms . ~;
 
 	# Copy Terminator config file (somme times need to be manual enabled).
-	rsync terminator/config ~/.config/terminator/config;
+	mkdir -p ~/.config/terminator && rsync terminator/config ~/.config/terminator/config;
 
-	source ~/.bash_profile;
 
 }
 
