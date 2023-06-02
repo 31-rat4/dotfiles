@@ -7,34 +7,15 @@ git pull origin master;
 function fileSync (){
 	rsync --exclude ".git/" \
 		--exclude "terminator/"\
-		--exclude "vimrc/"\
-		--exclude ".vimrc"\
-		--exclude ".DS_Store" \
-		--exclude ".osx" \
 		--exclude "bootstrap.sh" \
 		--exclude "README.md" \
 		--exclude "LICENSE-MIT.txt" \
 		-avh --no-perms . ~;
 
-	# Copy Terminator config file (somme times need to be manual enabled).
-	mkdir -p ~/.config/terminator && rsync terminator/config ~/.config/terminator/config;
 
 
 }
 
-function vimrConfig() {
-
-
-	if [ ! -d ~/.vim_runtime ]
-	then
-		mkdir ~/.vim_runtime;
-	fi
-
-	cp -r vimrc/* ~/.vim_runtime;
-	cp .vimrc ~/.vim_runtime/my_configs.vim;
-	sh ~/.vim_runtime/install_awesome_vimrc.sh;
-
-}
 
 function zshPluguinConfig() {
 		# Only proceed if zsh is installed
@@ -49,11 +30,20 @@ function zshPluguinConfig() {
 				echo "ZSH not detected. Skipping pluguin install...";
 		fi
 }
+function terminatorConfig(){
+	# Copy Terminator config file (somme times need to be manual enabled).
+	mkdir -p ~/.config/terminator && rsync terminator/config ~/.config/terminator/config;
 
+	cp ./terminator/terminator.png /usr/share/icons/hicolor/48x48/apps/;
+
+	sed -i "s/Icon=terminator/Icon=\/usr\/share\/icons\/hicolor\/48x48\/apps\/terminator.png/" /usr/share/applications/terminator.desktop;
+
+}
 function doIt() {
 		fileSync;
-		vimrConfig;
-		zshPluguinConfig	;
+		vimConfig;
+		zshPluguinConfig;
+		terminatorConfig;
 }
 
 if [ "$1" == "--force" -o "$1" == "-f" ]; then
