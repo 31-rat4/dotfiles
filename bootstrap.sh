@@ -39,11 +39,27 @@ function terminatorConfig(){
 	sed -i "s/Icon=terminator/Icon=\/usr\/share\/icons\/hicolor\/48x48\/apps\/terminator.png/" /usr/share/applications/terminator.desktop;
 
 }
+
+function vimConfig(){
+	mkdir -p ~/.vim/autoload ~/.vim/bundle && \
+	curl -LSso ~/.vim/autoload/pathogen.vim https://tpo.pe/pathogen.vim;
+}
+
 function doIt() {
 		fileSync;
 		vimConfig;
 		zshPluguinConfig;
+
+		if which terminator > /dev/null 2>&1; then
+	
 		terminatorConfig;
+
+		else
+
+		echo "Terminator not installed..."
+		
+		fi
+
 }
 
 if [ "$1" == "--force" -o "$1" == "-f" ]; then
