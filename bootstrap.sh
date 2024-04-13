@@ -22,12 +22,13 @@ function zshPluguinConfig() {
 		echo "Cheking for ZSH"
 		if command -v zsh > /dev/null;
 		then
-				echo "Install oh-my-zzsh pluguins."
+				echo "Install oh-my-zzsh plugins."
 				git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
 				git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting;
+				git clone https://github.com/agkozak/zsh-z ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-z
 
 		else
-				echo "ZSH not detected. Skipping pluguin install...";
+				echo "ZSH not detected. Skipping plugin install...";
 		fi
 }
 function terminatorConfig(){
