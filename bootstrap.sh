@@ -41,14 +41,9 @@ function terminatorConfig(){
 
 }
 
-function vimConfig(){
-	mkdir -p ~/.vim/autoload ~/.vim/bundle && \
-	curl -LSso ~/.vim/autoload/pathogen.vim https://tpo.pe/pathogen.vim;
-}
 
 function doIt() {
 		fileSync;
-		vimConfig;
 		zshPluguinConfig;
 
 		if which terminator > /dev/null 2>&1; then
