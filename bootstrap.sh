@@ -2,7 +2,10 @@
 
 cd "$(dirname "${BASH_SOURCE}")";
 
-git pull origin master;
+if [ "$EUID" -ne 0 ]; then
+    echo "This script must be run as root" 
+    exit 1
+fi
 
 function fileSync (){
 	rsync --exclude ".git/" \
@@ -42,12 +45,16 @@ function terminatorConfig(){
 
 	mkdir -p ~/.config/terminator && rsync terminator/config ~/.config/terminator/config;
 
-	sudo cp ./terminator/terminator.png /usr/share/icons/hicolor/48x48/apps/;
+ cp ./terminator/terminator.png /usr/share/icons/hicolor/48x48/apps/;
 
-	sudo sed -i "s/Icon=terminator/Icon=\/usr\/share\/icons\/hicolor\/48x48\/apps\/terminator.png/" /usr/share/applications/terminator.desktop;
+sed -i "s/Icon=terminator/Icon=\/usr\/share\/icons\/hicolor\/48x48\/apps\/terminator.png/" /usr/share/applications/terminator.desktop;
 
+# Add Shortcut
+	gsettings set org.gnome.settings-daemon.plugins.media-keys custom-keybindings "['/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/']"
+gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/ name 'Launch Terminator'
+gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/ command 'terminator'
+gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/ binding '<Ctrl><Alt>t'
 }
-
 
 function doIt() {
 		fileSync;

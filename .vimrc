@@ -2,8 +2,7 @@
 " Start of dotfile --->
 " Use the Solarized Dark theme
 set background=dark
-colorscheme solarized
-let g:solarized_termtrans=1
+colorscheme seoul256
 
 " Make Vim more useful
 set nocompatible
