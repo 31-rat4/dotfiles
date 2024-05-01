@@ -1,15 +1,14 @@
 #!/usr/bin/env bash
 
-cd "$(dirname "${BASH_SOURCE}")";
-
+# cd "$(dirname "${BASH_SOURCE}")";
 if [ "$EUID" -ne 0 ]; then
     echo "This script must be run as root" 
     exit 1
 fi
 
 function fileSync (){
+	echo "running filesync...";
 	rsync --exclude ".git/" \
-		--exclude "terminator/"\
 		--exclude "bootstrap.sh" \
 		--exclude "README.md" \
 		--exclude "LICENSE-MIT.txt" \
@@ -25,9 +24,11 @@ function zshPluguinConfig() {
 		echo "Cheking for ZSH"
 		if command -v zsh > /dev/null;
 		then
-				echo "Install oh-my-zzsh plugins."
+				echo "Install oh-my-zzsh plugins.";
 				if [ ! -d ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions ]; then
 								git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
+				else
+					echo "entering else ..."
 				fi
 				if [ ! -d ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting ]; then
 				git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting;
@@ -41,19 +42,17 @@ function zshPluguinConfig() {
 		fi
 }
 function terminatorConfig(){
-	# Copy Terminator config file (somme times need to be manual enabled).
+	echo "running terminatorConfig..."
 
-	mkdir -p ~/.config/terminator && rsync terminator/config ~/.config/terminator/config;
+	cp ./assets/terminator.png /usr/share/icons/hicolor/48x48/apps/;
 
- cp ./terminator/terminator.png /usr/share/icons/hicolor/48x48/apps/;
-
-sed -i "s/Icon=terminator/Icon=\/usr\/share\/icons\/hicolor\/48x48\/apps\/terminator.png/" /usr/share/applications/terminator.desktop;
+	sed -i "s/Icon=terminator/Icon=\/usr\/share\/icons\/hicolor\/48x48\/apps\/terminator.png/" /usr/share/applications/terminator.desktop;
 
 # Add Shortcut
-	gsettings set org.gnome.settings-daemon.plugins.media-keys custom-keybindings "['/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/']"
-gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/ name 'Launch Terminator'
-gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/ command 'terminator'
-gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/ binding '<Ctrl><Alt>t'
+#gsettings set org.gnome.settings-daemon.plugins.media-keys custom-keybindings "['/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/']"
+#gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/ name 'Launch Terminator'
+#gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/ command 'terminator'
+#gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/ binding '<Ctrl><Alt>t'
 }
 
 function doIt() {

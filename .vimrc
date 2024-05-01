@@ -8,6 +8,7 @@ colorscheme seoul256
 set nocompatible
 " Use the OS clipboard by default (on versions compiled with `+clipboard`)
 set clipboard=unnamedplus
+set clipboard+=unnamedplus
 " Enhance command-line completion
 set wildmenu
 " Allow cursor keys in insert mode
