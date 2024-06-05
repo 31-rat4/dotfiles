@@ -1,5 +1,5 @@
 # If you come from bash you might have to change your $PATH.
-export PATH=$HOME/.local/bin:$HOME/bin:/usr/local/bin:$PATH
+export PATH=$HOME/.local/bin:$HOME/bin:/usr/local/bin:$PATH:$HOME/Scripts
 
 # Path to your oh-my-zsh installation.
 export ZSH="/home/$USER/.oh-my-zsh"
@@ -104,3 +104,10 @@ source ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting/zsh-sy
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+export GPG_TTY=$(tty)
+
+# Python Virtual Env
+
+eval "$(pyenv init -)"
+eval "$(pyenv virtualenv-init -)"

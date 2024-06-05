@@ -1,6 +1,5 @@
+require("31rat4.remap")
 require("31rat4.highlights")
-vim.g.mapleader = " "
-vim.g.maplocalleader = " "
 require("31rat4.lazy_init")
 
 -- !! Teme Stuff  !!
