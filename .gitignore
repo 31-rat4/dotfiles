@@ -15,3 +15,5 @@ Thumbs.db
 
 # Vim swap backup
 *.swp
+
+lazy-lock.json

@@ -1,31 +1,24 @@
-#!/usr/bin/env bash
-
-# cd "$(dirname "${BASH_SOURCE}")";
-if [ "$EUID" -ne 0 ]; then
-    echo "This script must be run as root" 
-    exit 1
-fi
-
+#!/bin/bash
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 function fileSync (){
+	exclusion=(
+		--exclude ".git/" 
+		--exclude "bootstrap.sh" 
+		--exclude "backup.sh"
+		--exclude "README.md" 
+		--exclude "LICENSE-MIT.txt"
+		)
 	echo "running filesync...";
-	rsync --exclude ".git/" \
-		--exclude "bootstrap.sh" \
-		--exclude "README.md" \
-		--exclude "LICENSE-MIT.txt" \
-		-avh --no-perms . ~;
-
-
-
+	rsync -av "$SCRIPT_DIR" "$HOME";
 }
-
-
 function zshPluguinConfig() {
 		# Only proceed if zsh is installed
 		echo "Cheking for ZSH"
 		if command -v zsh > /dev/null;
 		then
+				plugin_folder=${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins
 				echo "Install oh-my-zzsh plugins.";
-				if [ ! -d ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions ]; then
+				if [ ! -d ${plugin_folder}/zsh-autosuggestions ]; then
 								git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
 				else
 					echo "entering else ..."
@@ -44,9 +37,9 @@ function zshPluguinConfig() {
 function terminatorConfig(){
 	echo "running terminatorConfig..."
 
-	cp ./assets/terminator.png /usr/share/icons/hicolor/48x48/apps/;
+	sudo cp ./assets/terminator.png /usr/share/icons/hicolor/48x48/apps/;
 
-	sed -i "s/Icon=terminator/Icon=\/usr\/share\/icons\/hicolor\/48x48\/apps\/terminator.png/" /usr/share/applications/terminator.desktop;
+	sudo sed -i "s/Icon=terminator/Icon=\/usr\/share\/icons\/hicolor\/48x48\/apps\/terminator.png/" /usr/share/applications/terminator.desktop;
 
 # Add Shortcut
 #gsettings set org.gnome.settings-daemon.plugins.media-keys custom-keybindings "['/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/']"
@@ -79,5 +72,4 @@ else
 		doIt;
 	fi;
 fi;
-unset doIt;
 
