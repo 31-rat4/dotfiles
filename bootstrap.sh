@@ -1,15 +1,17 @@
 #!/bin/bash
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 function fileSync (){
+	echo "running filesync...";
+	echo "SCRIPT_DIR: $SCRIPT_DIR, TARGET: $HOME";
 	exclusion=(
 		--exclude ".git/" 
 		--exclude "bootstrap.sh" 
 		--exclude "backup.sh"
 		--exclude "README.md" 
 		--exclude "LICENSE-MIT.txt"
-		)
-	echo "running filesync...";
-	rsync -av "$SCRIPT_DIR" "$HOME";
+		);
+	USER_SCRIPT="$(logname)";
+	sudo -u $USER_SCRIPT rsync -av --exclude-from="exclude_list.txt" "$SCRIPT_DIR"/ /home/$USER_SCRIPT;
 }
 function zshPluguinConfig() {
 		# Only proceed if zsh is installed
@@ -35,33 +37,30 @@ function zshPluguinConfig() {
 		fi
 }
 function terminatorConfig(){
-	echo "running terminatorConfig..."
 
-	sudo cp ./assets/terminator.png /usr/share/icons/hicolor/48x48/apps/;
+	if which terminator > /dev/null 2>&1; then
+		echo "running terminatorConfig..."
 
-	sudo sed -i "s/Icon=terminator/Icon=\/usr\/share\/icons\/hicolor\/48x48\/apps\/terminator.png/" /usr/share/applications/terminator.desktop;
+		sudo cp ./assets/terminator.png /usr/share/icons/hicolor/48x48/apps/;
+
+		sudo sed -i "s/Icon=terminator/Icon=\/usr\/share\/icons\/hicolor\/48x48\/apps\/terminator.png/" /usr/share/applications/terminator.desktop;
 
 # Add Shortcut
 #gsettings set org.gnome.settings-daemon.plugins.media-keys custom-keybindings "['/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/']"
 #gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/ name 'Launch Terminator'
 #gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/ command 'terminator'
 #gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/ binding '<Ctrl><Alt>t'
+else
+
+	echo "Terminator not installed..."
+
+	fi
 }
 
 function doIt() {
 		fileSync;
 		zshPluguinConfig;
-
-		if which terminator > /dev/null 2>&1; then
-	
 		terminatorConfig;
-
-		else
-
-		echo "Terminator not installed..."
-		
-		fi
-
 }
 
 if [ "$1" == "--force" -o "$1" == "-f" ]; then

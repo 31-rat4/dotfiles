@@ -109,6 +109,11 @@ export NVM_DIR="$HOME/.nvm"
 export GPG_TTY=$(tty)
 
 # Python Virtual Env
+export PYENV_ROOT="$HOME"/.pyenv
+export PATH="$PYENV_ROOT"/bin:"$PATH"
+if command -v pyenv 1>/dev/null 2>&1; then
+  eval "$(pyenv init -)"
+fi
+eval "$(pyenv virtualenv-init -)"
 
-eval "$(pyenv init -)"
 # eval "$(pyenv virtualenv-init -)"
