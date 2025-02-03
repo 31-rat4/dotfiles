@@ -1,0 +1,8 @@
+.git
+.git*
+bootstrap.sh
+backup.sh
+README.md
+LICENSE-MIT.txt
+exclude_list.txt
+
